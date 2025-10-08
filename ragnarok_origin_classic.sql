@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 07, 2025 at 06:37 PM
+-- Generation Time: Oct 08, 2025 at 08:44 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -201,6 +201,13 @@ CREATE TABLE `bans` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `bans`
+--
+
+INSERT INTO `bans` (`ban_id`, `player_id`, `start_date`, `end_date`, `reason`, `created_at`) VALUES
+(1, 2, '2025-10-07 23:57:35', '2025-10-08 23:57:35', 'เหงา', '2025-10-07 16:57:35');
+
 -- --------------------------------------------------------
 
 --
@@ -241,69 +248,72 @@ CREATE TABLE `characters` (
   `zeny` bigint(20) DEFAULT 0,
   `map_id` int(11) DEFAULT NULL,
   `pos_x` int(11) DEFAULT NULL,
-  `pos_y` int(11) DEFAULT NULL
+  `pos_y` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `characters`
 --
 
-INSERT INTO `characters` (`char_id`, `player_id`, `name`, `gender`, `level`, `exp`, `zenny`, `hp`, `mp`, `zeny`, `map_id`, `pos_x`, `pos_y`) VALUES
-(1, 1, 'Barbara', 'M', 49, 102116, 0, 2550, 1030, NULL, NULL, NULL, NULL),
-(2, 2, 'Rebecca', 'M', 36, 0, 0, 1900, 770, NULL, NULL, NULL, NULL),
-(3, 3, 'Nicholas', 'F', 59, 118590, 0, 3050, 1230, NULL, NULL, NULL, NULL),
-(4, 4, 'Shelly', 'M', 82, 332182, 0, 4200, 1690, NULL, NULL, NULL, NULL),
-(5, 5, 'James', 'M', 47, 155053, 0, 2450, 990, NULL, NULL, NULL, NULL),
-(6, 6, 'Brittany', 'M', 21, 67347, 0, 1150, 470, NULL, NULL, NULL, NULL),
-(7, 7, 'Maria', 'M', 48, 99648, 0, 2500, 1010, NULL, NULL, NULL, NULL),
-(8, 8, 'John', 'M', 46, 186714, 0, 2400, 970, NULL, NULL, NULL, NULL),
-(9, 9, 'Heidi', 'F', 27, 91638, 0, 1450, 590, NULL, NULL, NULL, NULL),
-(10, 10, 'Kevin', 'M', 86, 236844, 0, 4400, 1770, NULL, NULL, NULL, NULL),
-(11, 11, 'Gabrielle', 'M', 35, 163695, 0, 1850, 750, NULL, NULL, NULL, NULL),
-(12, 12, 'Linda', 'M', 90, 305100, 0, 4600, 1850, NULL, NULL, NULL, NULL),
-(13, 13, 'Laura', 'M', 88, 231880, 0, 4500, 1810, NULL, NULL, NULL, NULL),
-(14, 14, 'Ashlee', 'M', 83, 206006, 0, 4250, 1710, NULL, NULL, NULL, NULL),
-(15, 15, 'Blake', 'M', 10, 18980, 0, 600, 250, NULL, NULL, NULL, NULL),
-(16, 16, 'Amanda', 'M', 78, 122148, 0, 4000, 1610, NULL, NULL, NULL, NULL),
-(17, 17, 'Doris', 'F', 82, 253134, 0, 4200, 1690, NULL, NULL, NULL, NULL),
-(18, 18, 'Casey', 'M', 22, 66462, 0, 1200, 490, NULL, NULL, NULL, NULL),
-(19, 19, 'Deborah', 'F', 69, 94668, 0, 3550, 1430, NULL, NULL, NULL, NULL),
-(20, 20, 'Alexander', 'F', 94, 384930, 0, 4800, 1930, NULL, NULL, NULL, NULL),
-(21, 21, 'Robert', 'M', 32, 38144, 0, 1700, 690, NULL, NULL, NULL, NULL),
-(22, 22, 'Tracy', 'M', 21, 95067, 0, 1150, 470, NULL, NULL, NULL, NULL),
-(23, 23, 'Ryan', 'F', 60, 86940, 0, 3100, 1250, NULL, NULL, NULL, NULL),
-(24, 24, 'Michael', 'F', 49, 79674, 0, 2550, 1030, NULL, NULL, NULL, NULL),
-(25, 25, 'Patricia', 'F', 35, 124950, 0, 1850, 750, NULL, NULL, NULL, NULL),
-(26, 26, 'Steve', 'M', 82, 135710, 0, 4200, 1690, NULL, NULL, NULL, NULL),
-(27, 27, 'Eric', 'M', 89, 377716, 0, 4550, 1830, NULL, NULL, NULL, NULL),
-(28, 28, 'Gregory', 'F', 72, 272664, 0, 3700, 1490, NULL, NULL, NULL, NULL),
-(29, 29, 'Aimee', 'M', 29, 79141, 0, 1550, 630, NULL, NULL, NULL, NULL),
-(30, 30, 'Debra', 'M', 88, 302896, 0, 4500, 1810, NULL, NULL, NULL, NULL),
-(31, 31, 'Christina', 'F', 42, 52920, 0, 2200, 890, NULL, NULL, NULL, NULL),
-(32, 32, 'Samantha', 'M', 99, 255024, 0, 5050, 2030, NULL, NULL, NULL, NULL),
-(33, 33, 'Kim', 'F', 8, 20504, 0, 500, 210, NULL, NULL, NULL, NULL),
-(34, 34, 'Steven', 'F', 30, 103200, 0, 1600, 650, NULL, NULL, NULL, NULL),
-(35, 35, 'Margaret', 'F', 5, 14585, 0, 350, 150, NULL, NULL, NULL, NULL),
-(36, 36, 'Marcus', 'M', 41, 129847, 0, 2150, 870, NULL, NULL, NULL, NULL),
-(37, 37, 'Sarah', 'F', 52, 105508, 0, 2700, 1090, NULL, NULL, NULL, NULL),
-(38, 38, 'Joshua', 'M', 35, 174195, 0, 1850, 750, NULL, NULL, NULL, NULL),
-(39, 39, 'Shannon', 'F', 9, 29394, 0, 550, 230, NULL, NULL, NULL, NULL),
-(40, 40, 'Karen', 'M', 28, 126700, 0, 1500, 610, NULL, NULL, NULL, NULL),
-(41, 41, 'Ashley', 'F', 73, 354780, 0, 3750, 1510, NULL, NULL, NULL, NULL),
-(42, 42, 'Elizabeth', 'F', 92, 96324, 0, 4700, 1890, NULL, NULL, NULL, NULL),
-(43, 43, 'Matthew', 'M', 41, 155226, 0, 2150, 870, NULL, NULL, NULL, NULL),
-(44, 44, 'Troy', 'M', 28, 110656, 0, 1500, 610, NULL, NULL, NULL, NULL),
-(45, 45, 'Mark', 'M', 84, 123396, 0, 4300, 1730, NULL, NULL, NULL, NULL),
-(46, 46, 'Tony', 'M', 64, 242688, 0, 3300, 1330, NULL, NULL, NULL, NULL),
-(47, 47, 'Jonathan', 'F', 51, 235824, 0, 2650, 1070, NULL, NULL, NULL, NULL),
-(48, 48, 'Caitlyn', 'M', 83, 265517, 0, 4250, 1710, NULL, NULL, NULL, NULL),
-(49, 49, 'Nicole', 'M', 59, 240425, 0, 3050, 1230, NULL, NULL, NULL, NULL),
-(50, 50, 'Angela', 'M', 19, 39748, 0, 1050, 430, NULL, NULL, NULL, NULL),
-(0, 1, 'Zerox', 'M', 10, 2500, 500, 600, 200, 0, NULL, NULL, NULL),
-(0, 2, 'Rinako', 'F', 20, 12000, 2000, 1500, 500, 0, NULL, NULL, NULL),
-(0, 3, 'Kyren', 'M', 35, 28000, 4000, 3500, 800, 0, NULL, NULL, NULL),
-(0, 4, 'Mitsuki', 'F', 47, 50000, 6000, 6000, 1200, 0, NULL, NULL, NULL),
-(0, 5, 'Tetsu', 'M', 52, 90000, 8000, 9000, 1500, 0, NULL, NULL, NULL);
+INSERT INTO `characters` (`char_id`, `player_id`, `name`, `gender`, `level`, `exp`, `zenny`, `hp`, `mp`, `zeny`, `map_id`, `pos_x`, `pos_y`, `created_at`) VALUES
+(1, 1, 'Barbara', 'M', 49, 102116, 0, 2550, 1030, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(2, 2, 'Rebecca', 'M', 36, 0, 0, 1900, 770, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(3, 3, 'Nicholas', 'F', 59, 118590, 0, 3050, 1230, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(4, 4, 'Shelly', 'M', 82, 332182, 0, 4200, 1690, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(5, 5, 'James', 'M', 47, 155053, 0, 2450, 990, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(6, 6, 'Brittany', 'M', 21, 67347, 0, 1150, 470, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(7, 7, 'Maria', 'M', 48, 99648, 0, 2500, 1010, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(8, 8, 'John', 'M', 46, 186714, 0, 2400, 970, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(9, 9, 'Heidi', 'F', 27, 91638, 0, 1450, 590, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(10, 10, 'Kevin', 'M', 86, 236844, 0, 4400, 1770, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(11, 11, 'Gabrielle', 'M', 35, 163695, 0, 1850, 750, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(12, 12, 'Linda', 'M', 90, 305100, 0, 4600, 1850, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(13, 13, 'Laura', 'M', 88, 231880, 0, 4500, 1810, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(14, 14, 'Ashlee', 'M', 83, 206006, 0, 4250, 1710, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(15, 15, 'Blake', 'M', 10, 18980, 0, 600, 250, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(16, 16, 'Amanda', 'M', 78, 122148, 0, 4000, 1610, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(17, 17, 'Doris', 'F', 82, 253134, 0, 4200, 1690, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(18, 18, 'Casey', 'M', 22, 66462, 0, 1200, 490, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(19, 19, 'Deborah', 'F', 69, 94668, 0, 3550, 1430, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(20, 20, 'Alexander', 'F', 94, 384930, 0, 4800, 1930, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(21, 21, 'Robert', 'M', 32, 38144, 0, 1700, 690, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(22, 22, 'Tracy', 'M', 21, 95067, 0, 1150, 470, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(23, 23, 'Ryan', 'F', 60, 86940, 0, 3100, 1250, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(24, 24, 'Michael', 'F', 49, 79674, 0, 2550, 1030, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(25, 25, 'Patricia', 'F', 35, 124950, 0, 1850, 750, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(26, 26, 'Steve', 'M', 82, 135710, 0, 4200, 1690, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(27, 27, 'Eric', 'M', 89, 377716, 0, 4550, 1830, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(28, 28, 'Gregory', 'F', 72, 272664, 0, 3700, 1490, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(29, 29, 'Aimee', 'M', 29, 79141, 0, 1550, 630, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(30, 30, 'Debra', 'M', 88, 302896, 0, 4500, 1810, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(31, 31, 'Christina', 'F', 42, 52920, 0, 2200, 890, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(32, 32, 'Samantha', 'M', 99, 255024, 0, 5050, 2030, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(33, 33, 'Kim', 'F', 8, 20504, 0, 500, 210, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(34, 34, 'Steven', 'F', 30, 103200, 0, 1600, 650, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(35, 35, 'Margaret', 'F', 5, 14585, 0, 350, 150, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(36, 36, 'Marcus', 'M', 41, 129847, 0, 2150, 870, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(37, 37, 'Sarah', 'F', 52, 105508, 0, 2700, 1090, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(38, 38, 'Joshua', 'M', 35, 174195, 0, 1850, 750, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(39, 39, 'Shannon', 'F', 9, 29394, 0, 550, 230, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(40, 40, 'Karen', 'M', 28, 126700, 0, 1500, 610, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(41, 41, 'Ashley', 'F', 73, 354780, 0, 3750, 1510, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(42, 42, 'Elizabeth', 'F', 92, 96324, 0, 4700, 1890, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(43, 43, 'Matthew', 'M', 41, 155226, 0, 2150, 870, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(44, 44, 'Troy', 'M', 28, 110656, 0, 1500, 610, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(45, 45, 'Mark', 'M', 84, 123396, 0, 4300, 1730, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(46, 46, 'Tony', 'M', 64, 242688, 0, 3300, 1330, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(47, 47, 'Jonathan', 'F', 51, 235824, 0, 2650, 1070, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(48, 48, 'Caitlyn', 'M', 83, 265517, 0, 4250, 1710, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(49, 49, 'Nicole', 'M', 59, 240425, 0, 3050, 1230, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(50, 50, 'Angela', 'M', 19, 39748, 0, 1050, 430, NULL, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(0, 1, 'Zerox', 'M', 10, 2500, 500, 600, 200, 0, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(0, 2, 'Rinako', 'F', 20, 12000, 2000, 1500, 500, 0, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(0, 3, 'Kyren', 'M', 35, 28000, 4000, 3500, 800, 0, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(0, 4, 'Mitsuki', 'F', 47, 50000, 6000, 6000, 1200, 0, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(0, 5, 'Tetsu', 'M', 52, 90000, 8000, 9000, 1500, 0, NULL, NULL, NULL, '2025-10-07 23:41:57'),
+(0, 23, 'undefined', 'F', 1, 0, 0, 100, 50, 0, NULL, NULL, NULL, '2025-10-08 00:15:35'),
+(0, 24, 'undefined', 'F', 1, 0, 0, 100, 50, 0, NULL, NULL, NULL, '2025-10-08 00:16:32');
 
 -- --------------------------------------------------------
 
@@ -1858,33 +1868,6 @@ CREATE TABLE `level_requirements` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mail_system`
---
-
-CREATE TABLE `mail_system` (
-  `mail_id` int(11) NOT NULL,
-  `sender_id` int(11) NOT NULL,
-  `receiver_id` int(11) NOT NULL,
-  `subject` varchar(100) DEFAULT NULL,
-  `message` text DEFAULT NULL,
-  `attachment_item` int(11) DEFAULT NULL,
-  `attachment_quantity` int(11) DEFAULT 0,
-  `sent_at` datetime DEFAULT current_timestamp(),
-  `is_read` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `mail_system`
---
-
-INSERT INTO `mail_system` (`mail_id`, `sender_id`, `receiver_id`, `subject`, `message`, `attachment_item`, `attachment_quantity`, `sent_at`, `is_read`) VALUES
-(1, 1, 2, 'Welcome Gift', 'ยินดีต้อนรับเข้าสู่ Ragnarok!', NULL, 0, '2025-10-07 23:26:56', 0),
-(2, 3, 4, 'Guild Invite', 'เข้ากิลด์ Moonlight สิ!', NULL, 0, '2025-10-07 23:26:56', 0),
-(3, 5, 1, 'Trade Offer', 'สนใจขายของมั้ย?', NULL, 0, '2025-10-07 23:26:56', 0);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `market_transactions`
 --
 
@@ -1908,6 +1891,27 @@ INSERT INTO `market_transactions` (`transaction_id`, `seller_id`, `buyer_id`, `i
 (3, 2, 1, 7, 2, 850, '2025-10-07 23:25:33'),
 (4, 4, 6, 3, 5, 400, '2025-10-07 23:25:33'),
 (5, 5, 3, 9, 1, 3000, '2025-10-07 23:25:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `message_id` int(11) NOT NULL,
+  `sender` varchar(50) DEFAULT NULL,
+  `receiver_id` int(11) DEFAULT NULL,
+  `message` text DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`message_id`, `sender`, `receiver_id`, `message`, `created_at`) VALUES
+(4, 'admin', NULL, 'Hello players!', '2025-10-08 00:07:19');
 
 -- --------------------------------------------------------
 
@@ -2079,6 +2083,188 @@ CREATE TABLE `quests_progress` (
   `status` enum('not_started','in_progress','completed') DEFAULT 'not_started',
   `progress_percent` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `quests_progress`
+--
+
+INSERT INTO `quests_progress` (`progress_id`, `player_id`, `quest_name`, `status`, `progress_percent`) VALUES
+(1, 1, 'Prologue: Awakening', 'completed', 100),
+(2, 1, 'Forest Hunt', 'in_progress', 60),
+(3, 1, 'Poring Extermination', 'completed', 100),
+(4, 1, 'Goblin Cave', 'in_progress', 45),
+(5, 1, 'Lost Necklace', 'not_started', 0),
+(6, 1, 'Slay the Orc Chief', 'completed', 100),
+(7, 1, 'Treasure of Prontera', 'in_progress', 70),
+(8, 1, 'Final Trial', 'not_started', 0),
+(9, 2, 'Prologue: Awakening', 'completed', 100),
+(10, 2, 'Wolf Hunt', 'in_progress', 40),
+(11, 2, 'Rescue the Merchant', 'completed', 100),
+(12, 2, 'Mystic Woods', 'not_started', 0),
+(13, 2, 'Ancient Relic', 'completed', 100),
+(14, 2, 'Battle at Geffen', 'in_progress', 50),
+(15, 2, 'Fallen Knight', 'in_progress', 65),
+(16, 2, 'Dragon’s Nest', 'not_started', 0),
+(17, 3, 'Prologue: Awakening', 'completed', 100),
+(18, 3, 'Slime Cleaning', 'completed', 100),
+(19, 3, 'Cursed Ruins', 'in_progress', 55),
+(20, 3, 'Lost Memories', 'not_started', 0),
+(21, 3, 'Bandit Ambush', 'completed', 100),
+(22, 3, 'Moonlight Prayer', 'in_progress', 35),
+(23, 3, 'Desert Mirage', 'completed', 100),
+(24, 3, 'Guardian Spirit', 'not_started', 0),
+(25, 4, 'Start of Journey', 'completed', 100),
+(26, 4, 'Find Missing Pet', 'in_progress', 70),
+(27, 4, 'Cursed Forest', 'in_progress', 20),
+(28, 4, 'Ancient Tower', 'not_started', 0),
+(29, 4, 'Path to Wizardry', 'completed', 100),
+(30, 4, 'Undead Purge', 'completed', 100),
+(31, 4, 'Forgotten Tomb', 'in_progress', 45),
+(32, 4, 'Sword of Dawn', 'not_started', 0),
+(33, 5, 'Prologue: Awakening', 'completed', 100),
+(34, 5, 'Goblin Mine', 'in_progress', 60),
+(35, 5, 'Hidden Village', 'completed', 100),
+(36, 5, 'Demon’s Contract', 'not_started', 0),
+(37, 5, 'Defend Prontera', 'completed', 100),
+(38, 5, 'Battlefield Echo', 'in_progress', 50),
+(39, 5, 'Seal of Odin', 'not_started', 0),
+(40, 5, 'Test of Courage', 'completed', 100),
+(41, 6, 'Lost in Morroc', 'completed', 100),
+(42, 6, 'Guard the Caravan', 'in_progress', 50),
+(43, 6, 'Shadow Assassin', 'not_started', 0),
+(44, 6, 'Cave of Fire', 'completed', 100),
+(45, 6, 'Artifact Recovery', 'in_progress', 65),
+(46, 6, 'Siren’s Song', 'completed', 100),
+(47, 6, 'Dark Horizon', 'not_started', 0),
+(48, 6, 'Battle of Midgard', 'in_progress', 30),
+(49, 7, 'Rebirth Trial', 'completed', 100),
+(50, 7, 'Guild Invitation', 'in_progress', 40),
+(51, 7, 'Moonlight Mystery', 'not_started', 0),
+(52, 7, 'Training Ground', 'completed', 100),
+(53, 7, 'Ancient Shrine', 'in_progress', 50),
+(54, 7, 'Harpy Hunt', 'not_started', 0),
+(55, 7, 'Magic Crystal', 'completed', 100),
+(56, 7, 'Spirit Duel', 'in_progress', 25),
+(57, 8, 'Royal Guard Test', 'completed', 100),
+(58, 8, 'Lost Traveler', 'not_started', 0),
+(59, 8, 'Storm Fortress', 'in_progress', 60),
+(60, 8, 'Temple of Light', 'completed', 100),
+(61, 8, 'Lava Pit', 'completed', 100),
+(62, 8, 'Merchant Escort', 'in_progress', 55),
+(63, 8, 'Crystal Plains', 'not_started', 0),
+(64, 8, 'Ancient Tomb', 'completed', 100),
+(65, 9, 'Hidden Passage', 'completed', 100),
+(66, 9, 'Frost Cavern', 'in_progress', 45),
+(67, 9, 'Goblin Ambush', 'not_started', 0),
+(68, 9, 'Mystery of Rune', 'completed', 100),
+(69, 9, 'Orc Invasion', 'in_progress', 50),
+(70, 9, 'Bridge of Fate', 'not_started', 0),
+(71, 9, 'Knight’s Honor', 'completed', 100),
+(72, 9, 'Fallen Angel', 'in_progress', 60),
+(73, 10, 'Training Quest', 'completed', 100),
+(74, 10, 'Find the Blacksmith', 'in_progress', 70),
+(75, 10, 'Frozen Plains', 'not_started', 0),
+(76, 10, 'Underground Ruin', 'completed', 100),
+(77, 10, 'Dark Spirit', 'in_progress', 35),
+(78, 10, 'Blessing of Valkyrie', 'completed', 100),
+(79, 10, 'Rogue Encounter', 'in_progress', 45),
+(80, 10, 'Eternal Flame', 'not_started', 0),
+(81, 11, 'Trial of the Sword', 'completed', 100),
+(82, 11, 'Mystic Library', 'in_progress', 45),
+(83, 11, 'Goblin’s Secret', 'completed', 100),
+(84, 11, 'Echoes of the Past', 'not_started', 0),
+(85, 11, 'Battle in the Mist', 'in_progress', 60),
+(86, 11, 'Hidden Altar', 'completed', 100),
+(87, 11, 'Silent Village', 'in_progress', 40),
+(88, 11, 'Guardian’s Pact', 'not_started', 0),
+(89, 12, 'First Light', 'completed', 100),
+(90, 12, 'Witch of the East', 'in_progress', 55),
+(91, 12, 'Treasure Hunt', 'completed', 100),
+(92, 12, 'Dark Contract', 'not_started', 0),
+(93, 12, 'Frozen Guardian', 'in_progress', 30),
+(94, 12, 'Wind Temple', 'completed', 100),
+(95, 12, 'Forgotten Melody', 'in_progress', 65),
+(96, 12, 'Ancient Memory', 'not_started', 0),
+(97, 13, 'Shattered Blade', 'completed', 100),
+(98, 13, 'Crimson Tower', 'in_progress', 70),
+(99, 13, 'Merchant’s Favor', 'completed', 100),
+(100, 13, 'Shadow in the Woods', 'not_started', 0),
+(101, 13, 'Frozen Dreams', 'completed', 100),
+(102, 13, 'Dragon Soul', 'in_progress', 40),
+(103, 13, 'Lunar Blessing', 'not_started', 0),
+(104, 13, 'Bandit Hideout', 'completed', 100),
+(105, 14, 'Trial of Courage', 'completed', 100),
+(106, 14, 'Haunted Mines', 'in_progress', 35),
+(107, 14, 'Wind Rider', 'completed', 100),
+(108, 14, 'Crystal Mirage', 'not_started', 0),
+(109, 14, 'Forest Guardian', 'in_progress', 50),
+(110, 14, 'Ancient Heirloom', 'completed', 100),
+(111, 14, 'Darkness Rising', 'not_started', 0),
+(112, 14, 'Mystic Waterfall', 'in_progress', 60),
+(113, 15, 'Rookie Training', 'completed', 100),
+(114, 15, 'Shadows of Payon', 'in_progress', 40),
+(115, 15, 'Castle Defense', 'completed', 100),
+(116, 15, 'Runestone Mystery', 'not_started', 0),
+(117, 15, 'Valkyrie’s Blessing', 'in_progress', 70),
+(118, 15, 'Frozen Tears', 'completed', 100),
+(119, 15, 'Ancient Whisper', 'in_progress', 55),
+(120, 15, 'Sword of Time', 'not_started', 0),
+(121, 16, 'Secret of Glast Heim', 'completed', 100),
+(122, 16, 'Forest Ruins', 'in_progress', 60),
+(123, 16, 'Pirate’s Revenge', 'completed', 100),
+(124, 16, 'Goblin’s Gold', 'not_started', 0),
+(125, 16, 'Light of Faith', 'completed', 100),
+(126, 16, 'Phantom Cavern', 'in_progress', 40),
+(127, 16, 'Rune Barrier', 'in_progress', 35),
+(128, 16, 'Spirit’s Rest', 'not_started', 0),
+(129, 17, 'Knight’s Oath', 'completed', 100),
+(130, 17, 'Broken Crown', 'in_progress', 65),
+(131, 17, 'Sandstorm Arena', 'completed', 100),
+(132, 17, 'Wandering Bard', 'not_started', 0),
+(133, 17, 'Ancient Curse', 'in_progress', 45),
+(134, 17, 'Light of Hope', 'completed', 100),
+(135, 17, 'Frozen Shadow', 'in_progress', 20),
+(136, 17, 'Path of Valor', 'not_started', 0),
+(137, 18, 'Lost Artifact', 'completed', 100),
+(138, 18, 'Knight’s Duel', 'in_progress', 50),
+(139, 18, 'Hidden Shrine', 'completed', 100),
+(140, 18, 'Forest of Echoes', 'not_started', 0),
+(141, 18, 'Soul of the Sea', 'in_progress', 60),
+(142, 18, 'Eternal Flame', 'completed', 100),
+(143, 18, 'Temple Guardian', 'in_progress', 30),
+(144, 18, 'Mystic Wind', 'not_started', 0),
+(145, 19, 'Prologue of Dawn', 'completed', 100),
+(146, 19, 'Blacksmith’s Legacy', 'in_progress', 55),
+(147, 19, 'Battle at the Bridge', 'completed', 100),
+(148, 19, 'Whispering Forest', 'not_started', 0),
+(149, 19, 'Ancient Relic', 'in_progress', 40),
+(150, 19, 'Moonlight Blessing', 'completed', 100),
+(151, 19, 'Dragon’s Wrath', 'in_progress', 65),
+(152, 19, 'Crystal Heart', 'not_started', 0),
+(153, 20, 'Path of the Priest', 'completed', 100),
+(154, 20, 'Tower of Trials', 'in_progress', 35),
+(155, 20, 'Holy Relic', 'completed', 100),
+(156, 20, 'Bandit Chase', 'not_started', 0),
+(157, 20, 'Sea of Silence', 'completed', 100),
+(158, 20, 'Sacred Stone', 'in_progress', 55),
+(159, 20, 'Magic Academy', 'not_started', 0),
+(160, 20, 'Knight Tournament', 'completed', 100),
+(161, 21, 'Guardian’s Light', 'completed', 100),
+(162, 21, 'Eclipse Cavern', 'in_progress', 45),
+(163, 21, 'Crystal Spire', 'completed', 100),
+(164, 21, 'Black Rose', 'not_started', 0),
+(165, 21, 'Trial of Destiny', 'in_progress', 65),
+(166, 21, 'Wind of Eternity', 'completed', 100),
+(167, 21, 'Flame Canyon', 'not_started', 0),
+(168, 21, 'Rogue’s Path', 'completed', 100),
+(169, 22, 'Awakening of Magic', 'completed', 100),
+(170, 22, 'Frostbound Path', 'in_progress', 60),
+(171, 22, 'Soul Contract', 'completed', 100),
+(172, 22, 'Goblin Rebellion', 'not_started', 0),
+(173, 22, 'Desert Mirage', 'completed', 100),
+(174, 22, 'Lunar Gate', 'in_progress', 45),
+(175, 22, 'Battle of Shadows', 'not_started', 0),
+(176, 22, 'Legacy of Heroes', 'completed', 100);
 
 -- --------------------------------------------------------
 
@@ -2252,15 +2438,6 @@ ALTER TABLE `items`
   ADD PRIMARY KEY (`item_id`);
 
 --
--- Indexes for table `mail_system`
---
-ALTER TABLE `mail_system`
-  ADD PRIMARY KEY (`mail_id`),
-  ADD KEY `sender_id` (`sender_id`),
-  ADD KEY `receiver_id` (`receiver_id`),
-  ADD KEY `attachment_item` (`attachment_item`);
-
---
 -- Indexes for table `market_transactions`
 --
 ALTER TABLE `market_transactions`
@@ -2268,6 +2445,13 @@ ALTER TABLE `market_transactions`
   ADD KEY `idx_seller` (`seller_id`),
   ADD KEY `idx_buyer` (`buyer_id`),
   ADD KEY `idx_item` (`item_id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`message_id`),
+  ADD KEY `fk_messages_receiver` (`receiver_id`);
 
 --
 -- Indexes for table `monsters`
@@ -2356,13 +2540,13 @@ ALTER TABLE `world_boss_events`
 -- AUTO_INCREMENT for table `bans`
 --
 ALTER TABLE `bans`
-  MODIFY `ban_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ban_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `class_advancements`
@@ -2389,16 +2573,16 @@ ALTER TABLE `items`
   MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
--- AUTO_INCREMENT for table `mail_system`
---
-ALTER TABLE `mail_system`
-  MODIFY `mail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT for table `market_transactions`
 --
 ALTER TABLE `market_transactions`
   MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `monsters`
@@ -2434,7 +2618,7 @@ ALTER TABLE `players`
 -- AUTO_INCREMENT for table `quests_progress`
 --
 ALTER TABLE `quests_progress`
-  MODIFY `progress_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `progress_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- AUTO_INCREMENT for table `ranking_board`
@@ -2490,20 +2674,18 @@ ALTER TABLE `guilds`
   ADD CONSTRAINT `fk_guild_leader` FOREIGN KEY (`leader_id`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `mail_system`
---
-ALTER TABLE `mail_system`
-  ADD CONSTRAINT `mail_system_ibfk_1` FOREIGN KEY (`sender_id`) REFERENCES `players` (`player_id`),
-  ADD CONSTRAINT `mail_system_ibfk_2` FOREIGN KEY (`receiver_id`) REFERENCES `players` (`player_id`),
-  ADD CONSTRAINT `mail_system_ibfk_3` FOREIGN KEY (`attachment_item`) REFERENCES `items` (`item_id`);
-
---
 -- Constraints for table `market_transactions`
 --
 ALTER TABLE `market_transactions`
   ADD CONSTRAINT `fk_market_buyer` FOREIGN KEY (`buyer_id`) REFERENCES `players` (`player_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_market_item` FOREIGN KEY (`item_id`) REFERENCES `items` (`item_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_market_seller` FOREIGN KEY (`seller_id`) REFERENCES `players` (`player_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `messages`
+--
+ALTER TABLE `messages`
+  ADD CONSTRAINT `fk_messages_receiver` FOREIGN KEY (`receiver_id`) REFERENCES `players` (`player_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `monster_drops`
