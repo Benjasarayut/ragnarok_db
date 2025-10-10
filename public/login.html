@@ -2,114 +2,87 @@
 <html lang="th">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ragnarok Login</title>
-    <link rel="stylesheet" href="styles/login.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ragnarok Login</title>
+  <link rel="stylesheet" href="styles/login.css" />
 </head>
 
 <body>
+  <!-- 🌀 Loading Screen -->
+  <div id="loading-screen">
+    <img src="https://img.gravity.co.kr/gravity/official_renewal/assets/images/game/roo/logo.webp" alt="Ragnarok Logo"
+      class="loading-logo" />
+    <div class="loader"></div>
+    <p>Loading...</p>
+  </div>
 
-    <!-- 🌀 Loading Screen -->
-    <div id="loading-screen">
-        <img src="https://img.gravity.co.kr/gravity/official_renewal/assets/images/game/roo/logo.webp" alt="Ragnarok Logo" class="loading-logo">
-        <div class="loader"></div>
-        <p>Loading...</p>
+  <!-- 🎥 วิดีโอพื้นหลัง -->
+  <video autoplay muted loop id="bg-video">
+    <source src="https://roc.gnjoy.in.th/roc-collector/assets/img/wallpaper/Roc-wallpaper-video2022.mp4"
+      type="video/mp4" />
+  </video>
+
+  <!-- 🌌 Navbar -->
+  <header class="navbar">
+    <div class="logo">Ragnarok Origin Classic</div>
+  </header>
+
+  <!-- 🔐 Login Container -->
+  <div class="login-container">
+    <div class="login-box">
+      <h2>Login</h2>
+      <form id="loginForm" autocomplete="on">
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" value="123456" required />
+        <button type="submit" class="submit-btn">Login</button>
+        </form><br>
+        <p class="register-link">
+          <a href="register.html">Register</a>
+        </p>
+        <p id="message"></p>
+      </form>
     </div>
+  </div>
 
-    <!-- 🎥 วิดีโอพื้นหลัง -->
-    <video autoplay muted loop id="bg-video">
-        <source src="https://roc.gnjoy.in.th/roc-collector/assets/img/wallpaper/Roc-wallpaper-video2022.mp4"
-            type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+  <script>
+    // 🌀 Loading fade out
+    window.addEventListener("load", () => {
+      const loading = document.getElementById("loading-screen");
+      setTimeout(() => {
+        loading.classList.add("fade-out");
+        setTimeout(() => (loading.style.display = "none"), 800);
+      }, 800);
+    });
 
-    <!-- 🌌 Navbar -->
-    <header class="navbar">
-        <div class="logo">Ragnarok Origin Classci</div>
-    </header>
+    // 🔐 Login
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const msg = document.getElementById("message");
 
-    <!-- 🔐 Login Box (แสดงช่องรหัส แต่พรีฟิลเป็น 123456) -->
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Login</h2>
-            <form id="loginForm" autocomplete="on">
-                <input type="email" id="email" placeholder="Email" required style="margin-bottom:12px;">
-    
-                <!-- ช่องรหัสที่เห็นได้ แต่พรีฟิลด้วย 123456 -->
-                <input type="password" id="password" placeholder="Password" value="123456" required
-                    style="margin-bottom:14px;">
-    
-                <!-- ถ้าต้องการให้ผู้ใช้เห็นรหัสเป็นข้อความ (ไม่ซ่อน) ให้เปลี่ยน type เป็น text หรือเพิ่มปุ่ม toggle -->
-                <!-- ถ้าต้องการให้รหัสไม่สามารถแก้ได้ ให้เพิ่ม attribute readonly: readonly -->
-    
-                <button type="submit">Login</button>
-    
-                <p id="message" style="margin-top:12px;"></p>
-            </form>
-        </div>
-    </div>
-    
-    <script>
-        // ถ้ามี loading-screen ให้คงไว้ (จากหน้าเดิม)
-        window.addEventListener("load", () => {
-            const loading = document.getElementById("loading-screen");
-            if (loading) {
-                setTimeout(() => {
-                    loading.classList.add("fade-out");
-                    setTimeout(() => loading.style.display = "none", 800);
-                }, 800);
-            }
+      try {
+        const res = await fetch("../auth/login.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
         });
-
-        // ส่งข้อมูล login (จะส่ง password ที่พรีฟิลหรือที่ผู้ใช้แก้)
-        document.getElementById("loginForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
-            const message = document.getElementById("message");
-
-            // เบื้องต้นตรวจรูปแบบ
-            if (!email) {
-                message.textContent = "กรุณากรอกอีเมล";
-                message.style.color = "#ff6b6b";
-                return;
-            }
-            if (!password) {
-                message.textContent = "กรุณากรอกรหัสผ่าน";
-                message.style.color = "#ff6b6b";
-                return;
-            }
-
-            try {
-                const res = await fetch("../auth/login.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-                });
-
-                // ถ้า server คืนค่าไม่ใช่ JSON จะจับ error
-                const data = await res.json();
-
-                if (data.success) {
-                    message.textContent = data.message || "เข้าสู่ระบบสำเร็จ";
-                    message.style.color = "lightgreen";
-                    // หน่วงเล็กน้อยให้เห็นข้อความก่อนเปลี่ยนหน้า
-                    setTimeout(() => {
-                        window.location.href = data.redirect || "/";
-                    }, 700);
-                } else {
-                    message.textContent = data.error || "เข้าสู่ระบบไม่สำเร็จ";
-                    message.style.color = "#ff6b6b";
-                }
-            } catch (err) {
-                console.error("Login error:", err);
-                message.textContent = "⚠ เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์";
-                message.style.color = "#ff6b6b";
-            }
-        });
-    </script>
+        const data = await res.json();
+        if (data.success) {
+          msg.textContent = "✅ เข้าสู่ระบบสำเร็จ";
+          msg.style.color = "lightgreen";
+          setTimeout(() => (window.location.href = data.redirect || "home.php"), 800);
+        } else {
+          msg.textContent = data.error || "❌ เข้าสู่ระบบไม่สำเร็จ";
+          msg.style.color = "#ff6b6b";
+        }
+      } catch {
+        msg.textContent = "⚠️ เซิร์ฟเวอร์ไม่ตอบสนอง";
+        msg.style.color = "#ff6b6b";
+      }
+    });
+  </script>
 </body>
 
 </html>

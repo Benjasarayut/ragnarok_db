@@ -2,15 +2,12 @@
 header("Content-Type: application/json; charset=UTF-8");
 include("../db.php");
 session_start();
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
-if (!isset($_SESSION['admin_name'])) {
-    http_response_code(401);
-    echo json_encode(["success" => false, "message" => "Unauthorized ⚠️ Session หมดอายุ"]);
-    exit();
-}
+// ✅ ตรวจสิทธิ์
+$is_admin = isset($_SESSION['admin_name']);
+$is_user = isset($_SESSION['username']);
 
+// ✅ กำหนด SQL และ bind parameter
 $sql = "
   SELECT 
     c.char_id, 
@@ -21,27 +18,39 @@ $sql = "
   FROM characters c
   JOIN players p ON c.player_id = p.player_id
   LEFT JOIN classes cl ON c.class_id = cl.class_id
-  ORDER BY c.created_at DESC
 ";
+$params = [];
+$types = "";
 
-if (!$conn) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "❌ Database connection failed"]);
-    exit();
+// ✅ ถ้าเป็น user → ดูเฉพาะตัวเอง
+if ($is_user) {
+  $sql .= " WHERE p.username = ? ";
+  $params[] = $_SESSION["username"];
+  $types .= "s";
+} elseif (!$is_admin) {
+  // ❌ ไม่มีสิทธิ์ทั้ง admin และ user
+  echo json_encode(["success" => false, "message" => "⛔ Unauthorized"]);
+  exit;
 }
 
-$result = $conn->query($sql);
+$sql .= " ORDER BY c.created_at DESC";
 
-if (!$result) {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "❌ SQL Error: " . $conn->error]);
-    exit();
+$stmt = $conn->prepare($sql);
+if ($types) {
+  $stmt->bind_param($types, ...$params); // bind parameter หากมี
 }
+$stmt->execute();
+$result = $stmt->get_result();
 
+// ✅ รวบรวมผลลัพธ์
 $characters = [];
 while ($row = $result->fetch_assoc()) {
-    $characters[] = $row;
+  $characters[] = $row;
 }
 
-echo json_encode($characters);
-?>
+echo json_encode([
+  "success" => true,
+  "data" => $characters,
+  "count" => count($characters),
+  "is_admin" => $is_admin
+], JSON_UNESCAPED_UNICODE);

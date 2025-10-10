@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link rel="stylesheet" href="styles/register.css" />
+</head>
+
+<body>
+    <!-- 🎥 วิดีโอพื้นหลัง -->
+    <video autoplay muted loop id="bg-video">
+        <source src="https://roc.gnjoy.in.th/roc-collector/assets/img/wallpaper/Roc-wallpaper-video2022.mp4"
+            type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- 🔐 กล่องลงทะเบียน -->
+    <div class="login-box">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" required />
+            </div>
+
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" name="email" required />
+            </div>
+
+            <div class="input-group">
+                <label>Choose Class</label>
+                <select name="class_id" id="class_id" required>
+                    <option value="">เลือกอาชีพ</option>
+                    <option value="1">Swordsman</option>
+                    <option value="2">Archer</option>
+                    <option value="3">Mage</option>
+                    <option value="4">Thief</option>
+                    <option value="5">Acolyte</option>
+                    <option value="6">Merchant</option>
+                    <option value="7">Knight</option>
+                    <option value="8">Hunter</option>
+                    <option value="9">Wizard</option>
+                    <option value="10">Assassin</option>
+                    <option value="11">Priest</option>
+                    <option value="12">Blacksmith</option>
+                    <option value="13">Crusader</option>
+                    <option value="14">Bard</option>
+                    <option value="15">Dancer</option>
+                    <option value="16">Sage</option>
+                    <option value="17">Rogue</option>
+                    <option value="18">Monk</option>
+                    <option value="19">Alchemist</option>
+                </select>
+            </div>
+
+            <button type="submit" class="login-submit">Register</button>
+            <p class="register-link"><a href="login.html">Login</a></p>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const username = document.querySelector('input[name="username"]').value.trim();
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const class_id = document.querySelector('select[name="class_id"]').value;
+            const messageBox = document.getElementById("message");
+            messageBox.innerHTML = "";
+
+            try {
+                const response = await fetch("../api/register.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, email, class_id })
+                });
+
+                const result = await response.json();
+                const p = document.createElement("p");
+                p.textContent = result.message;
+                p.style.color = result.success ? "#90ee90" : "#ff8080";
+                messageBox.appendChild(p);
+
+                if (result.success) {
+                    // ✅ เรียก get_characters.php เพื่อดูข้อมูลตัวละครใหม่ที่สร้าง
+                    const characterRes = await fetch("../api/get_characters.php");
+                    const characterData = await characterRes.json();
+                    console.log("✅ ตัวละครที่มีทั้งหมด:", characterData);
+
+                    // ✅ ไปหน้า login
+                    setTimeout(() => {
+                        window.location.href = result.redirect || "login.html";
+                    }, 1500);
+                }
+
+            } catch (err) {
+                const p = document.createElement("p");
+                p.textContent = "เกิดข้อผิดพลาดในการสมัคร กรุณาลองใหม่";
+                p.style.color = "#ff8080";
+                messageBox.appendChild(p);
+                console.error("❌ Error:", err);
+            }
+        });
+    </script>
+</body>
+
+</html>
