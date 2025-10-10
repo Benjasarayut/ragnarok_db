@@ -503,26 +503,36 @@ option:checked {
     </div>
   </section>
 
-  <!-- 🔒 แบนผู้เล่น -->
-  <section id="ban" class="page">
-    <div class="box">
-      <h3>🔒 แบนผู้เล่น</h3>
-      <form id="banForm">
-        <label>เลือกผู้เล่น:</label><br>
-        <select id="banPlayerSelect" required>
-          <option value="">-- เลือกผู้เล่น --</option>
-          <?php foreach ($players as $p): ?>
-            <option value="<?= $p['player_id'] ?>"><?= htmlspecialchars($p['username']) ?></option>
-          <?php endforeach; ?>
-        </select><br><br>
-        <label>วันที่เริ่มแบน:</label><br><input type="date" id="banStart" required><br><br>
-        <label>วันที่สิ้นสุดแบน:</label><br><input type="date" id="banEnd" required><br><br>
-        <label>เหตุผล:</label><br><textarea id="banReason" rows="2" placeholder="ระบุเหตุผล..." required></textarea><br><br>
-        <button type="submit">✅ ดำเนินการแบน</button>
-      </form>
-      <p id="banResult"></p>
-    </div>
-  </section>
+<!-- 🔒 แบนผู้เล่น -->
+<section id="ban" class="page">
+  <div class="box">
+    <h3>🔒 แบนผู้เล่น</h3>
+    <form id="banForm">
+      <label>เลือกผู้เล่น:</label><br>
+      <select id="banPlayerSelect" required>
+        <option value="">-- เลือกผู้เล่น --</option>
+        <?php foreach ($players as $p): ?>
+          <option value="<?= $p['player_id'] ?>"><?= htmlspecialchars($p['username']) ?></option>
+        <?php endforeach; ?>
+      </select><br><br>
+
+      <label>วันที่เริ่มแบน:</label><br>
+      <input type="date" id="banStart" lang="th" required>
+      <p id="banStartDisplay" style="margin-top:4px;color:#facc15;font-size:0.9rem;"></p><br>
+
+      <label>วันที่สิ้นสุดแบน:</label><br>
+      <input type="date" id="banEnd" lang="th" required>
+      <p id="banEndDisplay" style="margin-top:4px;color:#facc15;font-size:0.9rem;"></p><br>
+
+      <label>เหตุผล:</label><br>
+      <textarea id="banReason" rows="2" placeholder="ระบุเหตุผล..." required></textarea><br><br>
+
+      <button type="submit">✅ ดำเนินการแบน</button>
+    </form>
+    <p id="banResult"></p>
+  </div>
+</section>
+
 
   <!-- 📜 ประวัติการแบน -->
   <section id="ban_history" class="page">
@@ -671,13 +681,48 @@ function editCharacter(e) {
   .catch(err => console.error("🚨 Edit Character Error:", err));
 }
 
-// 🧭 Ban Player
+// 🧭 แปลงวันที่จาก YYYY-MM-DD ➝ DD-MM-YYYY
+function formatDateToDDMMYYYY(dateStr) {
+  const [year, month, day] = dateStr.split("-");
+  return `${day}-${month}-${year}`;
+}
+
+// 🗓️ แสดงวันที่ที่เลือก
+const banStart = document.getElementById("banStart");
+const banEnd = document.getElementById("banEnd");
+const banStartDisplay = document.getElementById("banStartDisplay");
+const banEndDisplay = document.getElementById("banEndDisplay");
+
+// ตั้งค่าให้ไม่สามารถเลือกวันย้อนหลัง
+const today = new Date().toISOString().split("T")[0];
+banStart.min = today;
+banEnd.min = today;
+
+banStart.addEventListener("change", () => {
+  if (banStart.value) {
+    banStartDisplay.textContent = "📅 " + formatDateToDDMMYYYY(banStart.value);
+    banEnd.min = banStart.value;
+  }
+});
+
+banEnd.addEventListener("change", () => {
+  if (banEnd.value) {
+    banEndDisplay.textContent = "📅 " + formatDateToDDMMYYYY(banEnd.value);
+  }
+});
+
+// 🧭 Ban Player (ส่ง DD-MM-YYYY ไป Backend)
 function banPlayer(e) {
   e.preventDefault();
   const player_id = document.getElementById("banPlayerSelect").value;
-  const start_date = document.getElementById("banStart").value;
-  const end_date = document.getElementById("banEnd").value;
+  const start_date = banStart.value ? formatDateToDDMMYYYY(banStart.value) : "";
+  const end_date = banEnd.value ? formatDateToDDMMYYYY(banEnd.value) : "";
   const reason = document.getElementById("banReason").value;
+
+  if (!player_id || !start_date || !end_date || !reason) {
+    alert("⚠️ กรุณากรอกข้อมูลให้ครบ");
+    return;
+  }
 
   fetch("../api/ban_player.php", {
     method: "POST",
@@ -687,9 +732,37 @@ function banPlayer(e) {
   .then(res => res.json())
   .then(r => {
     document.getElementById("banResult").innerText = r.message;
-    if (r.success) setTimeout(() => { showPage("ban_history"); loadBanHistory(); }, 500);
+    if (r.success) {
+      document.getElementById("banForm").reset();
+      banStartDisplay.textContent = "";
+      banEndDisplay.textContent = "";
+      setTimeout(() => { showPage("ban_history"); loadBanHistory(); }, 500);
+    }
+  })
+  .catch(err => console.error("🚨 Ban Player Error:", err));
+}
+
+
+// 🗑️ ยกเลิกแบนผู้เล่น
+function unbanPlayer(ban_id, player_id) {
+  if (!confirm(`คุณต้องการยกเลิกแบน Player ID: ${player_id} ใช่หรือไม่?`)) return;
+
+  fetch(`../api/unban_player.php`, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ ban_id })
+  })
+  .then(res => res.json())
+  .then(r => {
+    alert(r.message);
+    if (r.success) loadBanHistory(); // โหลดตารางใหม่
+  })
+  .catch(err => {
+    console.error("🚨 Unban Error:", err);
+    alert("เกิดข้อผิดพลาดในการยกเลิกแบน");
   });
 }
+
 
 // 📜 ประวัติการแบน
 function loadBanHistory() {

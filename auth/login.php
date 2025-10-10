@@ -11,11 +11,10 @@ if (empty($email) || empty($password)) {
     exit;
 }
 
-// ✅ บังคับให้ใช้รหัส 123456 เท่านั้น
 $master_password = "123456";
 
 try {
-    // 🔸 ตรวจสอบใน admins ก่อน
+    // 🔸 ตรวจสอบแอดมิน
     $stmt = $conn->prepare("SELECT admin_id, email, password, role FROM admins WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -24,7 +23,6 @@ try {
     if ($admin_result->num_rows > 0) {
         $admin = $admin_result->fetch_assoc();
 
-        // ✅ ล็อกอินได้ถ้าใช้รหัส 123456 เท่านั้น
         if ($password === $master_password) {
             $_SESSION['user_id'] = $admin['admin_id'];
             $_SESSION['email'] = $admin['email'];
@@ -41,8 +39,8 @@ try {
         }
     }
 
-    // 🔹 ตรวจสอบใน players
-    $stmt = $conn->prepare("SELECT player_id, username, email, password FROM players WHERE email = ?");
+    // 🔹 ตรวจสอบ player
+    $stmt = $conn->prepare("SELECT player_id, username, email FROM players WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $player_result = $stmt->get_result();
@@ -50,8 +48,31 @@ try {
     if ($player_result->num_rows > 0) {
         $player = $player_result->fetch_assoc();
 
-        // ✅ ล็อกอินได้ถ้าใช้รหัส 123456 เท่านั้น
         if ($password === $master_password) {
+            // 🚨 ตรวจสอบว่าโดนแบนอยู่ไหม
+            $banStmt = $conn->prepare("
+                SELECT reason, end_date 
+                FROM bans 
+                WHERE player_id = ? 
+                AND NOW() BETWEEN start_date AND end_date
+            ");
+            $banStmt->bind_param("i", $player['player_id']);
+            $banStmt->execute();
+            $banResult = $banStmt->get_result();
+
+            if ($banResult->num_rows > 0) {
+                $banInfo = $banResult->fetch_assoc();
+                http_response_code(403);
+                echo json_encode([
+                    "success" => false,
+                    "error" => "🚫 บัญชีนี้ถูกแบน",
+                    "reason" => $banInfo['reason'],
+                    "end_date" => $banInfo['end_date']
+                ]);
+                exit;
+            }
+
+            // ✅ ถ้าไม่โดนแบน → ล็อกอินได้
             $_SESSION['user_id'] = $player['player_id'];
             $_SESSION['username'] = $player['username'];
             $_SESSION['role'] = "player";
@@ -66,7 +87,7 @@ try {
         }
     }
 
-    // ❌ ถ้าไม่ใช่ 123456 หรือไม่มี email นี้
+    // ❌ ไม่พบผู้ใช้หรือรหัสไม่ถูก
     echo json_encode(["error" => "❌ อีเมลหรือรหัสผ่านไม่ถูกต้อง (ใช้รหัส 123456 เท่านั้น)"]);
 
 } catch (Exception $e) {

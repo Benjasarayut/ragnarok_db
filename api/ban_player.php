@@ -2,16 +2,12 @@
 header("Content-Type: application/json; charset=UTF-8");
 include("../db.php");
 
-// 🧪 Debug error PHP (ถ้าต้องการ)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 $input = file_get_contents("php://input");
 $data = json_decode($input, true);
 
 $player_id = $data['player_id'] ?? null;
-$start_date = $data['start_date'] ?? null;
-$end_date = $data['end_date'] ?? null;
+$start_date = $data['start_date'] ?? null;  // DD-MM-YYYY
+$end_date = $data['end_date'] ?? null;      // DD-MM-YYYY
 $reason = $data['reason'] ?? '';
 
 if (!$player_id || !$start_date || !$end_date) {
@@ -19,22 +15,22 @@ if (!$player_id || !$start_date || !$end_date) {
     exit;
 }
 
-// ✅ เพิ่มเวลาเข้าไปในวันที่ (ให้ตรง datatype datetime)
-$start_datetime = $start_date . " 00:00:00";
-$end_datetime = $end_date . " 23:59:59";
-
-try {
-    $stmt = $conn->prepare("INSERT INTO bans (player_id, start_date, end_date, reason, created_at) VALUES (?, ?, ?, ?, NOW())");
-    $stmt->bind_param("isss", $player_id, $start_datetime, $end_datetime, $reason);
-
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true, "message" => "✅ แบนผู้เล่นสำเร็จ"]);
-    } else {
-        echo json_encode(["success" => false, "message" => "❌ Insert ล้มเหลว: " . $stmt->error]);
-    }
-
-    $stmt->close();
-} catch (Exception $e) {
-    echo json_encode(["success" => false, "message" => "❌ Error: " . $e->getMessage()]);
+// 🧭 ฟังก์ชันแปลง DD-MM-YYYY ➝ YYYY-MM-DD
+function convertToMySQLDate($ddmmyyyy) {
+    $parts = explode("-", $ddmmyyyy);
+    return $parts[2] . "-" . $parts[1] . "-" . $parts[0];
 }
+
+$start_datetime = convertToMySQLDate($start_date) . " 00:00:00";
+$end_datetime = convertToMySQLDate($end_date) . " 23:59:59";
+
+$stmt = $conn->prepare("INSERT INTO bans (player_id, start_date, end_date, reason, created_at) VALUES (?, ?, ?, ?, NOW())");
+$stmt->bind_param("isss", $player_id, $start_datetime, $end_datetime, $reason);
+
+if ($stmt->execute()) {
+    echo json_encode(["success" => true, "message" => "✅ แบนผู้เล่นสำเร็จ"]);
+} else {
+    echo json_encode(["success" => false, "message" => "❌ ไม่สามารถแบนผู้เล่นได้: ".$stmt->error]);
+}
+$stmt->close();
 ?>
