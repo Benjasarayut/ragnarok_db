@@ -18,10 +18,17 @@ $guilds = [];
 
 /* ✅ Query 1: ตัวละครเป็นสมาชิกใน guild_members */
 $sqlMember = "
-    SELECT g.guild_id, g.guild_name, g.description, g.creation_date, gr.role_name AS my_role
+    SELECT 
+        g.guild_id,
+        g.guild_name,
+        g.description,
+        g.creation_date,
+        gr.role_name AS my_role,
+        c_leader.name AS leader_name
     FROM guilds g
     JOIN guild_members gm ON gm.guild_id = g.guild_id
     LEFT JOIN guild_roles gr ON gm.role_id = gr.role_id
+    LEFT JOIN characters c_leader ON g.leader_id = c_leader.char_id
     WHERE gm.char_id = ?
 ";
 $stmt = $conn->prepare($sqlMember);
@@ -30,9 +37,12 @@ $stmt->execute();
 $memberResult = $stmt->get_result();
 
 while ($row = $memberResult->fetch_assoc()) {
-    // ดึงสมาชิกของกิลด์นั้น
+    // ✅ ดึงสมาชิกของกิลด์นั้น
     $memberSql = "
-        SELECT c.name AS character_name, p.username AS player_name, gr.role_name AS role
+        SELECT 
+            c.name AS character_name, 
+            p.username AS player_name, 
+            gr.role_name AS role
         FROM guild_members gm
         JOIN characters c ON gm.char_id = c.char_id
         JOIN players p ON gm.player_id = p.player_id
@@ -52,8 +62,15 @@ $stmt->close();
 
 /* ✅ Query 2: ตัวละครเป็นหัวหน้ากิลด์ (leader) — กรณีไม่มี record ใน guild_members */
 $sqlLeader = "
-    SELECT g.guild_id, g.guild_name, g.description, g.creation_date, 'Leader' AS my_role
+    SELECT 
+        g.guild_id,
+        g.guild_name,
+        g.description,
+        g.creation_date,
+        'Leader' AS my_role,
+        c_leader.name AS leader_name
     FROM guilds g
+    LEFT JOIN characters c_leader ON g.leader_id = c_leader.char_id
     WHERE g.leader_id = ?
       AND g.guild_id NOT IN (
           SELECT guild_id FROM guild_members WHERE char_id = ?
@@ -65,9 +82,12 @@ $stmtLeader->execute();
 $leaderResult = $stmtLeader->get_result();
 
 while ($row = $leaderResult->fetch_assoc()) {
-    // ดึงสมาชิกของกิลด์นั้น (อาจมี 0 คน)
+    // ✅ ดึงสมาชิกของกิลด์นั้น
     $memberSql = "
-        SELECT c.name AS character_name, p.username AS player_name, gr.role_name AS role
+        SELECT 
+            c.name AS character_name, 
+            p.username AS player_name, 
+            gr.role_name AS role
         FROM guild_members gm
         JOIN characters c ON gm.char_id = c.char_id
         JOIN players p ON gm.player_id = p.player_id
@@ -89,5 +109,4 @@ $stmtLeader->close();
 $response['success'] = true;
 $response['data']['guilds'] = $guilds;
 
-echo json_encode($response);
-?>
+echo json_encode($response, JSON_UNESCAPED_UNICODE);

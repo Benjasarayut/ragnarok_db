@@ -678,16 +678,26 @@ $players = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
       fetch("../api/get_characters.php")
         .then(res => res.json())
         .then(data => {
+          console.log("📦 Characters API Response:", data);
+
           const select = document.getElementById("editCharSelect");
           select.innerHTML = `<option value="">-- เลือกตัวละคร --</option>`;
+
+          // ✅ เช็กก่อนว่าเป็น Array จริง
+          if (!data || !Array.isArray(data)) {
+            console.warn("⚠️ get_characters.php ไม่ได้ส่ง array กลับมา");
+            return;
+          }
+
           data.forEach(char => {
-            select.innerHTML += `<option 
-          value="${char.char_id}" 
-          data-name="${char.name}" 
-          data-class="${char.class}" 
-          data-level="${char.level}">
-          [${char.char_id}] ${char.name} (${char.class}) - ${char.username}
-        </option>`;
+            select.innerHTML += `
+          <option 
+            value="${char.char_id}" 
+            data-name="${char.name}" 
+            data-class="${char.class}" 
+            data-level="${char.level}">
+            [${char.char_id}] ${char.name} (${char.class}) - ${char.username}
+          </option>`;
           });
         })
         .catch(err => console.error("🚨 Load Characters Error:", err));
